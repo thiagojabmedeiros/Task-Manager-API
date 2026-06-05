@@ -1,18 +1,16 @@
-import dotenv from "dotenv"
-dotenv.config()
+import env from "../env"
 
 const configs = {
   "development": {
-    "url": process.env.DB_URL as string,
+    "url": env.DATABASE_URL,
     "logging": console.log,
-    "port": 5432,
     "define": {
       "timestamps": true,
       "underscored": true
     }
   },
   "test": {
-    "url": process.env.DB_URL as string,
+    "url": process.env.DATABASE_URL as string,
     "logging": console.log,
     "define": {
       "timestamps": true,
@@ -20,7 +18,7 @@ const configs = {
     }
   },
   "production": {
-    "url": process.env.DB_URL as string,
+    "url": process.env.DATABASE_URL as string,
     "define": {
       "timestamps": true,
       "underscored": true
@@ -28,7 +26,7 @@ const configs = {
   }
 }
 
-const configsEnv = (process.env.NODE_ENV || "development") as keyof typeof configs
+const configsEnv = env.NODE_ENV as keyof typeof configs
 const dbConfigs = configs[configsEnv]
 
 export default dbConfigs
