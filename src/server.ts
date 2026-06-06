@@ -7,6 +7,6 @@ app.listen(env.PORT, async () => {
         await database.authenticate()
         console.log(`server is running on ${env.PORT}`)
     } catch(error) {
-        console.log("was not possible to connect database")
+        console.log("was not possible to connect database", error)
     }
 })
