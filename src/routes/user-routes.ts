@@ -4,6 +4,6 @@ const userController = new UserController()
 import { Router } from "express";
 const userRoutes = Router()
 
-userRoutes.get("/", userController.create)
+userRoutes.post("/", userController.create)
 
 export default userRoutes

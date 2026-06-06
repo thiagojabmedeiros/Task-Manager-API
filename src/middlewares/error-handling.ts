@@ -23,7 +23,8 @@ function errorHandling(
 
     if (error instanceof Error) {
         return response.status(500).json({
-            message: error.message
+            message: error.message,
+            from: error.name
         })
     }
 
