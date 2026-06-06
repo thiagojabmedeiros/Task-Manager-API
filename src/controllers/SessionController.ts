@@ -1,8 +1,10 @@
 import { Request, Response } from "express"
+import { sign } from "jsonwebtoken"
 import { compare } from "bcrypt"
 import z from "zod"
 
 
+import authConfig from "../configs/auth-config"
 import AppError from "../utils/AppError"
 import User from "../models/User"
 
@@ -17,7 +19,8 @@ class SessionController {
         const user = await User.findOne({
             where: {
                 email: email
-            }
+            },
+            attributes: ["id", "name", "role", "email", "password"]
         })
         if (!user) {
             throw new AppError("invalid email or password", 401)
@@ -28,7 +31,20 @@ class SessionController {
             throw new AppError("invalid email or password", 401)
         }
 
-        return response.status(201).json(user)
+        const token = await sign({ 
+            id: user.toJSON().id, role: user.toJSON().role },
+            authConfig.jwt.secret,
+            {
+                expiresIn: authConfig.jwt.expiresIn
+            }
+        )
+
+        const { password: _, ...userWithoutPassword } = user.toJSON()
+
+        return response.status(201).json({
+            token: token,
+            user: userWithoutPassword
+        })
     }
 }
 
