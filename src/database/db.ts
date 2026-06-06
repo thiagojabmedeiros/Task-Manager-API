@@ -1,8 +1,6 @@
-import dbConfigs from "../configs/db-config";
-
-const { url, ...options } = dbConfigs
+import dbConfig from "../configs/db-config";
 
 import { Sequelize } from "sequelize";
-const database = new Sequelize(url, options)
+const database = new Sequelize(dbConfig)
 
 export default database
