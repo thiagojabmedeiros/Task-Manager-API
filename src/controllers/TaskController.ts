@@ -42,6 +42,26 @@ class TaskController {
         
         return response.status(201).json()
     }
+    async index(request: Request, response: Response) {
+        const tasks = await Task.findAll({
+            attributes: ["title", "status", "priority"],
+            include: [
+                {
+                    association: "team",
+                    attributes: ["name"]
+                },
+                {
+                    association: "user",
+                    attributes: ["name", "role"]
+                }
+            ],
+        })
+        if (tasks.length === 0) {
+            throw new AppError("no tasks asigned yet", 404)
+        }
+        return response.status(200).json(tasks)
+    }
+
 }
 
 export default TaskController
