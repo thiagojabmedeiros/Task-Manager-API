@@ -25,6 +25,7 @@ class User extends Model {
 
     static associate(models: any) {
         this.belongsToMany(models.Team, { foreignKey: "user_id", through: models.TeamMember, as: "teams" })
+        this.hasMany(models.Task, { foreignKey: "asigned_to", as: "tasks" })
     }
 }
 
