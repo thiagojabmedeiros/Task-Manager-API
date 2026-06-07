@@ -49,7 +49,7 @@ class TeamController {
             throw new AppError("user does not exist", 404)
         }
 
-        await team.addMember(user)
+        await team.addUsers([user])
 
         return response.status(202).json({ message: "user added to team" })
     }

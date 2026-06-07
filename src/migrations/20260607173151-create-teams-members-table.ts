@@ -5,7 +5,7 @@ import { DataTypes, QueryInterface } from "sequelize";
 /** @type {import('sequelize-cli').Migration} */
 export default {
   async up (queryInterface: QueryInterface) {
-    await queryInterface.createTable("teams-members", {
+    await queryInterface.createTable("teams_members", {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -30,10 +30,14 @@ export default {
         type: DataTypes.DATE,
         allowNull: false
       },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false
+      }
     })
   },
 
   async down (queryInterface: QueryInterface) {
-    await queryInterface.dropTable("teams-members")
+    await queryInterface.dropTable("teams_members")
   }
 };

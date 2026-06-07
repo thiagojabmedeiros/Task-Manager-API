@@ -1,6 +1,9 @@
-import { Model, DataTypes, Sequelize } from "sequelize"
+import { Model, DataTypes, Sequelize, BelongsToManyAddAssociationsMixin } from "sequelize"
+import User from "./User"
 
 class Team extends Model {
+    declare addUsers: BelongsToManyAddAssociationsMixin<User, string>
+
     static initialize(connection: Sequelize) {
         this.init({
             id: {
@@ -19,7 +22,7 @@ class Team extends Model {
     }
 
     static associate(models: any) {
-        this.belongsToMany(models.Team, { foreignKey: "team_id", through: "teams-members", as: "users" })
+        this.belongsToMany(models.User, { foreignKey: "team_id", through: models.TeamMember, as: "users" })
     }
 }
 
