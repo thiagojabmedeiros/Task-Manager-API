@@ -1,7 +1,7 @@
 import { Model, DataTypes, Sequelize, BelongsToManyAddAssociationsMixin } from "sequelize"
 import User from "./User"
 
-class Team extends Model {
+class Task extends Model {
     static initialize(connection: Sequelize) {
         this.init({
             id: {
@@ -32,4 +32,4 @@ class Team extends Model {
     }
 }
 
-export default Team
+export default Task
