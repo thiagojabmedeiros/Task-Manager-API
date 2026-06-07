@@ -3,6 +3,7 @@ import z from "zod"
 import AppError from "../utils/AppError";
 
 import Team from "../models/Team";
+import User from "../models/User";
 
 class TeamController {
     async create(request: Request, response: Response) {
@@ -23,7 +24,34 @@ class TeamController {
 
         const team = await Team.create({ name, description })
 
-        return response.status(201).json({ message: "ok!" })
+        return response.status(201).json(team)
+    }
+
+    async addMember(request: Request, response: Response) {
+        const paramsSchema = z.object({
+            teamName: z.string().min(3)
+        })
+        const { teamName } = paramsSchema.parse(request.params)
+
+        const bodySchema = z.object({
+            user_id: z.uuid(),
+        })
+        const { user_id } = bodySchema.parse(request.body)
+
+        const [ team ] = await Team.findOrCreate({
+            where: {
+                name: teamName
+            }
+        })
+
+        const user = await User.findByPk(user_id)
+        if (!user) {
+            throw new AppError("user does not exist", 404)
+        }
+
+        await team.addMember(user)
+
+        return response.status(202).json({ message: "user added to team" })
     }
 }
 
