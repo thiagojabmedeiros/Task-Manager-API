@@ -17,6 +17,10 @@ class Team extends Model {
             underscored: true
         })
     }
+
+    static associate(models: any) {
+        this.belongsToMany(models.User, { foreignKey: "user_id", through: "teams-members"})
+    }
 }
 
 export default Team
