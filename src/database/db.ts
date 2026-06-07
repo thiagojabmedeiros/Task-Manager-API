@@ -10,4 +10,7 @@ const database = new Sequelize(env.DB_URL, dbConfig)
 User.initialize(database)
 Team.initialize(database)
 
+User.associate(database.models)
+Team.associate(database.models)
+
 export default database
