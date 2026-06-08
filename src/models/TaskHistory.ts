@@ -26,8 +26,8 @@ class TaskHistory extends Model {
     }
 
     static associate(models: any) {
-        this.belongsTo(models.User, { foreignKey: "asigned_to", as: "user" })
-        this.belongsTo(models.Team, { foreignKey: "team_id", as: "team" })
+        this.belongsTo(models.User, { foreignKey: "changed_by", as: "user" })
+        this.belongsTo(models.Task, { foreignKey: "task_id", as: "task" })
     }
 }
 
