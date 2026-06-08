@@ -55,7 +55,7 @@ class TaskController {
         
         return response.status(201).json(task)
     }
-    async index(request: Request, response: Response) {
+    async read(request: Request, response: Response) {
         const tasks = await Task.findAll({
             attributes: ["title", "status", "priority"],
             include: [
@@ -74,32 +74,50 @@ class TaskController {
         }
         return response.status(200).json(tasks)
     }
-    // async update(request: Request, response: Response) {
-    //     const paramsSchema = z.object({
-    //         task_id: z.uuid()
-    //     })
-    //     const { task_id } = paramsSchema.parse(request.params)
+    async update(request: Request, response: Response) {
+        const paramsSchema = z.object({
+            task_id: z.uuid()
+        })
+        const { task_id } = paramsSchema.parse(request.params)
 
-    //     const task = await Task.findOne({
-    //         where: {
-    //             id: task_id
-    //         }
-    //     })
-    //     if (!task) {
-    //         throw new AppError("task not found", 404)
-    //     }
+        const task = await Task.findOne({
+            where: {
+                id: task_id
+            }
+        })
+        if (!task) {
+            throw new AppError("task not found", 404)
+        }
 
-    //     const bodySchema = z.object({
-    //         new_status: z.enum(["pending", "in_progress", "completed"])
-    //     })
-    //     const { new_status } = bodySchema.parse(request.body)
+        const bodySchema = z.object({
+            new_status: z.enum(["pending", "in_progress", "completed"])
+        })
+        const { new_status } = bodySchema.parse(request.body)
 
-    //     const { task_id: id, status } = task.toJSON()
+        const { task_id: id, status } = task.toJSON()
+        
+        if (!request.user) {
+            throw new AppError("to make a change you need to be logged")
+        }
 
-    //     const taskHistory = await TaskHistory.create({ changed_by, task_id: task_id, new_status: new_status, old_status: status })
+        await task.update({ status: new_status })
 
+        const taskHistory = await TaskHistory.create({ changed_by: request.user.id, task_id: task_id, new_status: new_status, old_status: status })
 
-    // }
+        return response.status(201).json(taskHistory)
+    }
+    async delete(request: Request, response: Response) {
+        const paramsSchema = z.object({
+            task_id: z.uuid()
+        })
+        const { task_id } = paramsSchema.parse(request.params)
+        const task = await Task.findByPk(task_id)
+        if (!task) {
+            throw new AppError("task does not exist", 400)
+        }
+        await task.destroy()
+        return response.status(200).json({ message: "task removed" })
+    }
 }
 
 export default TaskController
