@@ -6,6 +6,7 @@ import Team from "../models/Team";
 import User from "../models/User";
 import Task from "../models/Task";
 import TeamMember from "../models/TeamMember";
+import TaskHistory from "../models/TaskHistory";
 
 class TaskController {
     async create(request: Request, response: Response) {
@@ -73,6 +74,32 @@ class TaskController {
         }
         return response.status(200).json(tasks)
     }
+    // async update(request: Request, response: Response) {
+    //     const paramsSchema = z.object({
+    //         task_id: z.uuid()
+    //     })
+    //     const { task_id } = paramsSchema.parse(request.params)
+
+    //     const task = await Task.findOne({
+    //         where: {
+    //             id: task_id
+    //         }
+    //     })
+    //     if (!task) {
+    //         throw new AppError("task not found", 404)
+    //     }
+
+    //     const bodySchema = z.object({
+    //         new_status: z.enum(["pending", "in_progress", "completed"])
+    //     })
+    //     const { new_status } = bodySchema.parse(request.body)
+
+    //     const { task_id: id, status } = task.toJSON()
+
+    //     const taskHistory = await TaskHistory.create({ changed_by, task_id: task_id, new_status: new_status, old_status: status })
+
+
+    // }
 }
 
 export default TaskController
