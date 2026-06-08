@@ -73,7 +73,6 @@ class TaskController {
         }
         return response.status(200).json(tasks)
     }
-
 }
 
 export default TaskController
