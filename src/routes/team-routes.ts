@@ -5,8 +5,9 @@ import { Router } from "express";
 const teamRoutes = Router()
 
 import ensureAuthenticate from "../middlewares/ensure-authenticate";
+import verifyAuthorization from "../middlewares/verify-authorization";
 
-teamRoutes.use(ensureAuthenticate)
+teamRoutes.use(ensureAuthenticate, verifyAuthorization(["admin"]))
 
 teamRoutes.post("/", teamController.create)
 teamRoutes.post("/:teamName", teamController.addMember)
